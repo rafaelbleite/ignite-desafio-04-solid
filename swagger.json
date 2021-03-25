@@ -1,0 +1,287 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SOLID Challenge Documentation",
+    "description": "This is an documentation of the SOLID Challenge Rocketseat",
+    "version": "1.0.0",
+    "contact": {
+      "email": "rafaelleite.dev@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create user",
+        "description": "Create a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "email": "string"
+                  }
+                },
+                "example": {
+                  "name": "Rocketseat",
+                  "email": "oi@rocketseat.com.br"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success."
+          },
+          "400": {
+            "description": "Email is already taken."
+          }
+        }
+      },
+      "get": {
+        "tags": ["users"],
+        "summary": "List all users",
+        "description":"Only `admin` users can access",
+        "parameters": [{
+          "name": "user_id",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "admin": {
+                        "type": "string",
+                        "example": true
+                      },
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string"                        
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "Date"
+                      },
+                      "updated_at": {
+                        "type": "Date"                        
+                      }
+                    }
+                  }
+                },
+                "example": [{
+                  "admin": false,
+                  "id": "93710c03-ae20-46b8-8312-2dc0e1930c29",
+                  "name": "Rocketseat",
+                  "email": "oi@rocketseat.com.br",
+                  "created_at": "2021-03-24T02:13:05.276Z",
+                  "updated_at": "2021-03-24T02:13:05.276Z"
+                },
+                {
+                  "admin": true,
+                  "id": "fe135cd6-c826-496e-8c4e-fba3ffce9ff1",
+                  "name": "Rafael",
+                  "email": "rafaelleite.dev@gmail.com",
+                  "created_at": "2021-03-24T02:15:05.276Z",
+                  "updated_at": "2021-03-24T02:15:05.276Z"
+                }]
+              }
+            }
+          },
+          "400": {
+            "description": "User without permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "User is not an administrator."
+                      }
+                    }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Show user information.",
+        "parameters": [{
+          "name": "user_id",
+          "in": "path",
+          "description": "User ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "admin": {
+                        "type": "string",
+                        "example": true
+                      },
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string"                        
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "Date"
+                      },
+                      "updated_at": {
+                        "type": "Date"                        
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "admin": true,
+                  "id": "fe135cd6-c826-496e-8c4e-fba3ffce9ff1",
+                  "name": "Rafael",
+                  "email": "rafaelleite.dev@gmail.com",
+                  "created_at": "2021-03-24T02:15:05.276Z",
+                  "updated_at": "2021-03-24T02:15:05.276Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ,
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Turn user Administrator.",
+        "parameters": [{
+          "name": "user_id",
+          "in": "path",
+          "description": "User ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "admin": {
+                        "type": "string",
+                        "example": true
+                      },
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string"                        
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "type": "Date"
+                      },
+                      "updated_at": {
+                        "type": "Date"                        
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "admin": true,
+                  "id": "fe135cd6-c826-496e-8c4e-fba3ffce9ff1",
+                  "name": "Rafael",
+                  "email": "rafaelleite.dev@gmail.com",
+                  "created_at": "2021-03-24T02:15:05.276Z",
+                  "updated_at": "2021-03-24T02:15:05.276Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
